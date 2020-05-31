@@ -1,46 +1,33 @@
 #include <iostream>
 #include <thread>
 #include <chrono>
+#include <string>
 
 using namespace std;
 
-void Work1()
+void Work1(string str)
 {
-	for (size_t i = 0; i < 10; i++)
+	cout << "ID потока = " << this_thread::get_id() << "\tWork1" << endl;
+	int a;
+	for (int i = 0; i < str.length(); i++)
 	{
-		cout << "ID потока = " << this_thread::get_id() << "\tWork1" << endl;
-		this_thread::sleep_for(chrono::milliseconds(2000));
+		str[i] = str[i] - 129;
+		cout << str[i];
 	}
-}
-
-
-void Work2()
-{
-	for (size_t i = 0; i < 10; i++)
-	{
-		cout << "ID потока = " << this_thread::get_id() << "\tWork2" << endl;
-		this_thread::sleep_for(chrono::milliseconds(1000));
-	}
+	cout << endl;
 }
 
 int main()
 {
 	setlocale(LC_ALL,"ru");
 
-	thread th1(Work1);
-	th1.detach();
+	string str;
+	cout << "Введите строку. (использовать только латинские буквы)" << endl;
+	cin >> str;
+	cout << endl;
 
-	thread th2(Work2);
-	th2.join();
+	thread th1(Work1,str);
+	th1.join();
 
-	cout << "Star main" << endl;
-	for (size_t i = 0; i < 10; i++)
-	{
-		cout << "ID потока = " << this_thread::get_id() << "\tmain" << endl;
-		this_thread::sleep_for(chrono::milliseconds(500));
-	}
-	cout << "End main" << endl;
-
-	
 	return 0;
 }
