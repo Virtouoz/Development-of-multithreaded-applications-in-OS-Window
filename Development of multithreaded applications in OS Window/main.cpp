@@ -3,6 +3,7 @@
 #include <chrono>
 #include <string>
 #include <Windows.h>
+#include <list>
 
 using namespace std;
 
@@ -57,6 +58,125 @@ void lab2(string str)
 	cout << "Time Critical = " << time2.count() << endl << endl;
 }
 
+void lab3()
+{
+	/*
+	проверить, дек пуст/не пуст;
+	добавить элемент в левый конец дека;
+	добавить элемент в правый конец дека;
+	удалить элемент слева;
+	удалить элемент справа;
+	просмотреть элемент слева;
+	просмотреть элемент справа;
+	обменять значениями элементы на концах дека;
+	*/
+	
+	list<PVOID> query;
+	int choise = 0;
+	bool isEmpty = false;
+	while (!isEmpty) {
+		cout << "-----------Menu------------" << endl;
+		cout << "1. check" << endl
+			<< "2. add left" << endl
+			<< "3. add right" << endl
+			<< "4. delete left" << endl
+			<< "5. delete right" << endl
+			<< "6. read left" << endl
+			<< "7. read right" << endl
+			<< "8. swap" << endl
+			<< "9. clear" << endl
+			<< "0. exit" << endl;
+		cout << "Input choise:";
+		cin >> choise;
+		switch (choise)
+		{
+		case 1: {
+			if (query.empty())
+				cout << "List is empty" << endl;
+			else
+				cout << "List is not empty" << endl;
+		}
+			  break;
+		case 2: {
+			PVOID Region = VirtualAlloc(NULL, 15 * 1024, MEM_RESERVE | MEM_COMMIT, PAGE_EXECUTE_READWRITE);
+			query.push_front(Region);
+		}
+			  break;
+		case 3: {
+			PVOID Region = VirtualAlloc(NULL, 15 * 1024, MEM_RESERVE | MEM_COMMIT, PAGE_EXECUTE_READWRITE);
+			query.push_back(Region);
+		}
+			  break;
+		case 4: {
+			if (query.empty())
+				cout << "List is empty" << endl;
+			else {
+				PVOID Region = query.front();
+				cout << "Head is deleted: " << endl;
+				VirtualFree(query.front(), 0, MEM_RELEASE);
+				query.pop_front();
+			}
+		}
+			  break;
+		case 5: {
+			if (query.empty())
+				cout << "List is empty" << endl;
+			else {
+				PVOID Region = query.back();
+				cout << "Head is deleted: " << endl;
+				VirtualFree(query.back(), 0, MEM_RELEASE);
+				query.pop_front();
+			}
+		}
+			  break;
+		case 6: {
+			if (query.empty())
+				cout << "List is empty" << endl;
+			else {
+				PVOID Region = query.front();
+				cout << "front: " << Region << endl;
+			}
+		}
+			  break;
+		case 7: {
+			if (query.empty())
+				cout << "List is empty" << endl;
+			else {
+				PVOID Region = query.back();
+				cout << "back: " << Region << endl;
+			}
+		}
+			  break;
+		case 8: {
+			PVOID Front = query.front();
+			PVOID Back = query.back();
+			if (query.empty())
+				cout << "List is empty" << endl;
+			else {
+				VirtualFree(query.front(), 0, MEM_RELEASE);
+				query.pop_front();
+				VirtualFree(query.back(), 0, MEM_RELEASE);
+				query.pop_back();
+				query.push_front(Back);
+				query.push_back(Front);
+			}
+		}
+			  break;
+		case 9: 
+			system("cls");
+			break;
+		case 0:
+			system("cls");
+			return;
+			break;
+		default: 
+			cout << "Wrong imput!" << endl;
+			break;
+		}
+	}
+
+}
+
 int main()
 {
 	setlocale(LC_ALL,"ru");
@@ -69,6 +189,8 @@ int main()
 	lab1(str);
 
 	lab2(str);
+
+	lab3();
 
 	return 0;
 }
